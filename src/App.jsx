@@ -2,6 +2,9 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Dashboard, Blogs, Category, Users,Login } from "./pages";
 import "./App.css";
+import Dummy from "./pages/Dummy";
+
+
 
 const App = () => {
   return (
@@ -15,6 +18,7 @@ const App = () => {
         <Route path="/blogs" element={<Blogs />} />
         <Route path="/categories" element={<Category />} />
         <Route path="/users" element={<Users />} />
+        <Route path="/dummy" element= {<Dummy/>}/>
       </Routes>
     </BrowserRouter>
   );

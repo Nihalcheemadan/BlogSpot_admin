@@ -1548,7 +1548,6 @@ export const ordersData = [
     BlogTitle: 'OpenAI Has Released Its Latest and Most Powerful AI Chatbot',
     Status: 'Read',
     StatusBg: '#03C9D7',
-    
   },
   {
     BlogType:'Text',
@@ -1557,7 +1556,6 @@ export const ordersData = [
     BlogTitle: 'OpenAI Has Released Its Latest and Most Powerful AI Chatbot',
     Status: 'Read',
     StatusBg: '#03C9D7',
-    
   },
   {
     BlogType:'Text',

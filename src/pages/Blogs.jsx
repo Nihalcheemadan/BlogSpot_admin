@@ -95,7 +95,7 @@ const Blogs = () => {
               >
                 <ColumnsDirective>
                   {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-                  {ordersGrid.map((item, index) => (
+                  { ordersGrid.map((item, index) => (
                     <ColumnDirective key={index} {...item} />
                   ))}
                 </ColumnsDirective>
@@ -107,7 +107,7 @@ const Blogs = () => {
                     Filter,
                     Page,
                     ExcelExport,
-                    PdfExport,
+                    PdfExport
                   ]}
                 />
               </GridComponent>

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useStateContext } from "../contexts/ContextProvider";
 import { FiSettings } from "react-icons/fi";
 import { TooltipComponent } from "@syncfusion/ej2-react-popups";
@@ -8,6 +8,8 @@ import {
   ColumnsDirective,
   GridComponent,
 } from "@syncfusion/ej2-react-grids";
+import axios from "axios";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const Category = () => {
   const {
@@ -29,6 +31,43 @@ const Category = () => {
     }
   }, []);
   const [showModal, setShowModal] = React.useState(false);
+
+  const [image, setImage] = useState();
+  const [category, setCategory] = useState();
+  const navigate = useNavigate();
+
+  const cloudAPI = "dudskpuk4";
+  const uploadProfile = async () => {
+    const formData = new FormData();
+    formData.append("file", image);
+    formData.append("upload_preset", "blogapp ");
+    console.log(formData);
+    let imageUrl = null;
+    await axios
+      .post( 
+        `https://api.cloudinary.com/v1_1/${cloudAPI}/image/upload`,
+        formData
+      )
+      .then(async (response) => {
+        console.log(response.data.secure_url);
+        const imageUrl = response.data.secure_url;
+        console.log(imageUrl);
+        const response1 = 
+        
+        await axios.post(
+          "http://localhost:5000/api/admin/createCategory",
+          { imageUrl: imageUrl,category:category } 
+          
+        ).then((res)=>{ 
+          console.log(res);
+          navigate('/categories')
+        })
+        if (response1.data.success) {
+          toast.success(response1.data.message);
+        }
+      });
+  };
+
   return (
     <div className={currentMode === "Dark" ? "dark" : ""}>
       <div className="flex relative dark:bg-main-dark-bg">
@@ -162,7 +201,7 @@ const Category = () => {
                       <div class="md:grid md:grid-cols-1 md:gap-6">
                         <div class="md:col-span-1"></div>
                         <div class="mt-5 md:mt-0 md:col-span-2">
-                          <form action="#" method="POST">
+                          <form onClick={uploadProfile}>
                             <div class="">
                               <div class="px-4 py-5 bg-white space-y-1 sm:p-6">
                                 <div>
@@ -172,11 +211,13 @@ const Category = () => {
                                   <div class="mt-1 flex items-center">
                                     <input
                                       type="text"
+                                      onChange={(e)=>{
+                                        setCategory(e.target.value)
+                                      }}
                                       className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     />
                                   </div>
                                 </div>
-
                                 <div>
                                   <label class="block text-sm font-medium text-gray-700">
                                     Category Image
@@ -204,16 +245,34 @@ const Category = () => {
                                         >
                                           <span>Upload a file</span>
                                           <input
+                                            onChange={(e) => {
+                                              setImage(e.target.files[0]);
+                                            }}
                                             id="file-upload"
                                             name="file-upload"
                                             type="file"
-                                            class="sr-only"
+                                            class="sr-only" 
                                           />
-                                        </label>
+                                        </label>    
                                         <p class="pl-1">or drag and drop</p>
                                       </div>
                                     </div>
                                   </div>
+                                </div>
+                                <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
+                                  <button
+                                    className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                                    type="button"
+                                  >
+                                    ADD
+                                  </button> 
+                                  <button
+                                    className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                                    type="button"
+                                    onClick={() => setShowModal(false)}
+                                  >
+                                    Close
+                                  </button>
                                 </div>
                               </div>
                             </div>
@@ -222,22 +281,6 @@ const Category = () => {
                       </div>
                     </div>
                     {/*footer*/}
-                    <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
-                      <button
-                        className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                        type="button"
-                        onClick={() => setShowModal(false)}
-                      >
-                        Close
-                      </button>
-                      <button
-                        className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                        type="button"
-                        onClick={() => setShowModal(false)}
-                      >
-                        ADD
-                      </button>
-                    </div>
                   </div>
                 </div>
               </div>
