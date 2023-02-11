@@ -486,7 +486,7 @@ export const links = [
       {
         name: 'Dashboard',
         icon: <RiAdminFill />,
-        url:'Dashboard'
+        url:''
       },
     ],
   },
