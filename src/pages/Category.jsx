@@ -1,75 +1,64 @@
 import React, { useEffect, useState } from "react";
-import { useStateContext } from "../contexts/ContextProvider";
-import { FiSettings } from "react-icons/fi";
-import { TooltipComponent } from "@syncfusion/ej2-react-popups";
-import { Navbar, Footer, Sidebar, ThemeSettings } from "../components";
-import {
-  ColumnDirective,
-  ColumnsDirective,
-  GridComponent,
-} from "@syncfusion/ej2-react-grids";
 import axios from "axios";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { toast  } from "react-hot-toast";
+
 
 const Category = () => {
-  const {
-    setCurrentColor,
-    setCurrentMode,
-    currentMode,
-    activeMenu,
-    currentColor,
-    themeSettings,
-    setThemeSettings,
-  } = useStateContext();
 
-  useEffect(() => {
-    const currentThemeColor = localStorage.getItem("colorMode");
-    const currentThemeMode = localStorage.getItem("themeMode");
-    if (currentThemeColor && currentThemeMode) {
-      setCurrentColor(currentThemeColor);
-      setCurrentMode(currentThemeMode);
-    }
-  }, []);
+  
 
-  const [showModal, setShowModal] = React.useState(false);
-
+  const navigate = useNavigate(); 
+  const [showModal, setShowModal] = useState(false);
   const [image, setImage] = useState();
   const [category, setCategory] = useState();
-  const navigate = useNavigate();
+  const [showcategory, setShowcategory] = useState();
+
+  useEffect(() => {
+    async function fetchData() {
+      const response = await axios.get(
+        "http://localhost:5000/api/admin/getCategory"
+      );
+      setShowcategory(response.data);
+    }
+    fetchData();
+  }, []);
 
   const cloudAPI = "dudskpuk4";
   const uploadProfile = async () => {
-    const formData = new FormData();
-    formData.append("file", image);
-    formData.append("upload_preset", "blogapp ");
-    console.log(formData);
-    let imageUrl = null;
-    await axios
-      .post(
-        `https://api.cloudinary.com/v1_1/${cloudAPI}/image/upload`,
-        formData
-      )
-      .then(async (response) => {
-        console.log(response.data.secure_url);
-        const imageUrl = response.data.secure_url;
-        console.log(imageUrl);
-        const response1 = await axios
-          .post("http://localhost:5000/api/admin/createCategory", {
-            imageUrl: imageUrl,
-            category: category,
-          })
-          .then((res) => {
-            console.log(res);
-            navigate("/categories");
-          });
-        if (response1.data.success) {
-          toast.success(response1.data.message);
-        }
-      });
+    try {
+      const formData = new FormData();
+      formData.append("file", image);
+      formData.append("upload_preset", "blogapp ");
+      console.log(formData);
+      let imageUrl = null;
+      await axios
+        .post(
+          `https://api.cloudinary.com/v1_1/${cloudAPI}/image/upload`,
+          formData
+        )
+        .then(async (response) => {
+          console.log(response.data.secure_url);
+          const imageUrl = response.data.secure_url;
+          console.log(imageUrl);
+          const response1 = await axios
+            .post("http://localhost:5000/api/admin/createCategory", {
+              imageUrl: imageUrl,
+              category: category,
+            })
+            .then(() => {
+              setShowModal(false);
+            });
+          navigate("/categories");
+        });
+    } catch (error) {
+      toast.error(error?.response?.data?.error)
+    }
   };
 
   return (
     <>
+
       <div className="pl-16 pt-9">
         <button
           className="h-12 w-32 bg-lime-500 "
@@ -79,62 +68,26 @@ const Category = () => {
         </button>
       </div>
       <div className="flex flex-wrap">
-        <div className="pt-12 pl-16 ">
-          <div className="max-w-sm rounded overflow-hidden shadow-sm inline-block ">
-            <img
-              className="w-full h-48 w-64"
-              src="https://thumbs.dreamstime.com/b/big-data-internet-information-technology-business-information-concept-big-data-internet-information-technology-business-112471615.jpg"
-              alt="Sunset in the mountains"
-            />
-            {/* <h6 className=" text-green text-center ">The Coldest Sunset</h6> */}
-            <div className="">
-              <div className="font-bold text-lg mb-2 text-slate-300">
-                Technology
+
+        {showcategory &&
+          showcategory.map((data) => (
+            <div className="pt-12 pl-16 " key={data._id}>
+              <div className="max-w-sm rounded overflow-hidden shadow-sm inline-block ">
+                <img
+                  className="w-full h-48 w-64"
+                  src={data.imageUrl}
+                  alt="Sunset in the mountains"
+                />
+                {/* <h6 className=" text-green text-center ">The Coldest Sunset</h6> */}
+                <div className="">
+                  <div className="font-bold text-lg mb-2 text-slate-300">
+                    {data.category}
+                    {console.log(data.category)}
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-        <div className="pt-12 pl-16">
-          <div className="max-w-sm rounded overflow-hidden shadow-sm inline-block ">
-            <img
-              className="w-full h-48 w-64"
-              src="https://images.unsplash.com/photo-1433838552652-f9a46b332c40?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8NHx8fGVufDB8fHx8&w=1000&q=80"
-              alt="Sunset in the mountains"
-            />
-            {/* <h6 className=" text-green text-center ">The Coldest Sunset</h6> */}
-            <div className="">
-              <div className="font-bold text-lg mb-2 text-slate-300">
-                Travel
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="pt-12 pl-16 w-96">
-          <div className="max-w-sm rounded overflow-hidden shadow-sm inline-block ">
-            <img
-              className="w-full h-48 w-64"
-              src="https://thumbs.dreamstime.com/b/wooden-table-food-top-view-cafe-102532611.jpg"
-              alt="Sunset in the mountains"
-            />
-            {/* <h6 className=" text-green text-center ">The Coldest Sunset</h6> */}
-            <div className="">
-              <div className="font-bold text-lg mb-2 text-slate-300">Food</div>
-            </div>
-          </div>
-        </div>
-        <div className="pt-12 pl-16 w-96">
-          <div className="max-w-sm rounded overflow-hidden shadow-sm inline-block ">
-            <img
-              className="w-full h-48 w-64"
-              src="https://media.gettyimages.com/id/157482029/photo/stack-of-books.jpg?s=612x612&w=gi&k=20&c=_Yaofm8sZLZkKs1eMkv-zhk8K4k5u0g0fJuQrReWfdQ="
-              alt="Sunset in the mountains"
-            />
-            {/* <h6 className=" text-green text-center ">The Coldest Sunset</h6> */}
-            <div className="">
-              <div className="font-bold text-lg mb-2 text-slate-300">Books</div>
-            </div>
-          </div>
-        </div>
+          ))}
       </div>
       {showModal ? (
         <>
