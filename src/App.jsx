@@ -6,7 +6,7 @@ import { FiSettings } from "react-icons/fi";
 import { useStateContext } from "../src/contexts/ContextProvider";
 import Dummy from "./pages/Dummy";
 import "./App.css";
-import { Footer, Navbar, Sidebar } from "./components";
+import { Footer, Navbar, Sidebar, ThemeSettings } from "./components";
 
 const App = () => {
   const {

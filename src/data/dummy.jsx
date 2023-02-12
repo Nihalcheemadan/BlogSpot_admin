@@ -465,13 +465,11 @@ export const employeesGrid = [
     width: '120',
     textAlign: 'Center',
     template: gridEmployeeCountry },
-
   { field: 'Status',
     headerText: 'Status',
     width: '135',
     format: 'yMd',
     textAlign: 'Center' },
-
   { field: 'Actions',
     headerText: 'Actions',
     template: gridUserStatus,
@@ -1413,7 +1411,7 @@ export const customersData = [
 export const employeesData = [
   {
     
-    Name: 'Nihal',
+    Username: 'Nihal',
     Job: 'Sales Representative',
     HireDate: '01/02/2021',
     Country: 'Kerala',
@@ -1426,7 +1424,7 @@ export const employeesData = [
   },
   {
     
-    Name: 'Nihal',
+    Username: 'Nihal',
     Job: 'Sales Representative',
     HireDate: '01/02/2021',
     Country: 'Kerala',
@@ -1439,7 +1437,7 @@ export const employeesData = [
   },
   {
     
-    Name: 'Nihal',
+    Username: 'Nihal',
     Job: 'Sales Representative',
     HireDate: '01/02/2021',
     Country: 'Kerala',
@@ -1452,7 +1450,7 @@ export const employeesData = [
   },
   {
     
-    Name: 'Nihal',
+    Username: 'Nihal',
     Job: 'Sales Representative',
     HireDate: '01/02/2021',
     Country: 'Kerala',
@@ -1465,7 +1463,7 @@ export const employeesData = [
   },
   {
     
-    Name: 'Nihal',
+    Username: 'Nihal',
     Job: 'Sales Representative',
     HireDate: '01/02/2021',
     Country: 'Kerala',
@@ -1478,7 +1476,7 @@ export const employeesData = [
   },
   {
     
-    Name: 'Nihal',
+    Username: 'Nihal',
     Job: 'Sales Representative',
     HireDate: '01/02/2021',
     Country: 'Kerala',
@@ -1491,7 +1489,7 @@ export const employeesData = [
   },
   {
     
-    Name: 'Nihal',
+    Username: 'Nihal',
     Job: 'Sales Representative',
     HireDate: '01/02/2021',
     Country: 'Kerala',
@@ -1504,7 +1502,7 @@ export const employeesData = [
   },
   {
     
-    Name: 'Nihal',
+    Username: 'Nihal',
     Job: 'Sales Representative',
     HireDate: '01/02/2021',
     Country: 'Kerala',
@@ -1517,7 +1515,7 @@ export const employeesData = [
   },
   {
     
-    Name: 'Nihal',
+    Username: 'Nihal',
     Job: 'Sales Representative',
     HireDate: '01/02/2021',
     Country: 'Kerala',
