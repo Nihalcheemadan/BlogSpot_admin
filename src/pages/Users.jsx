@@ -24,6 +24,16 @@ const Users = () => {
     fetchData();
   }, []);
 
+  const handleBlock = async () => {
+    try {
+      const response = await axios.put(
+        `http://localhost:5000/api/admin/userBlock/${props.username}`
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   const gridUserStatus = () => (
     <button
       type="button"
@@ -34,7 +44,6 @@ const Users = () => {
       Block
     </button>
   );
-
   const titleGrid = [
     {
       headerText: "Username",
@@ -42,7 +51,6 @@ const Users = () => {
       field: "username",
       textAlign: "Center",
     },
-
     { field: "email", headerText: "Email", width: "170", textAlign: "Center" },
     {
       field: "status",
@@ -77,7 +85,8 @@ const Users = () => {
       >
         <ColumnsDirective>
           {titleGrid.map((item, index) => (
-            <ColumnDirective key={index} {...item} />
+            <ColumnDirective key={item._id}  {...item} />
+            
           ))}
         </ColumnsDirective>
         <Inject services={[Toolbar, Search, Page]} />

@@ -5,9 +5,6 @@ import { toast  } from "react-hot-toast";
 
 
 const Category = () => {
-
-  
-
   const navigate = useNavigate(); 
   const [showModal, setShowModal] = useState(false);
   const [image, setImage] = useState();
