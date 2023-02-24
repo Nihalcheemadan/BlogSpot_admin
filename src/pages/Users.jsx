@@ -14,6 +14,9 @@ import { useState } from "react";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
+  const [change, setChange] = useState(false);
+ 
+ 
   useEffect(() => {
     async function fetchData() {
       const response = await axios.get(
@@ -22,28 +25,24 @@ const Users = () => {
       setUsers(response.data);
     }
     fetchData();
-  }, []);
+    console.log("change state updated:", change);
 
-  const handleBlock = async () => {
-    try {
-      const response = await axios.put(
-        `http://localhost:5000/api/admin/userBlock/${props.username}`
-      );
-      console.log(response.data);
-    } catch (error) {
-      console.error(error);
+  }, [change]);
+
+  const gridUserStatus = async(params, id) => {
+    console.log(params.status, id, "paraamsssssssss");
+    
+    if(params.status === 'unblocked'){
+      console.log('hello ');
+      await axios.get(`http://localhost:5000/api/admin/userBlock?id=${params._id}`)
+        setTimeout(() => setChange(prevState => !prevState), 1000);
+    }else{
+      await axios.get(`http://localhost:5000/api/admin/userUnblock?id=${params._id}`)
+        setTimeout(() => setChange(prevState => !prevState), 1000);
     }
   };
-  const gridUserStatus = () => (
-    <button
-      type="button"
-      style={{ background: "#03C9D7" }}
-      className="text-gray-500 py-1 px-2 capitalize rounded-2xl text-md"
-    >
-      {/* {props.Actions} */}
-      Block
-    </button>
-  );
+
+  
   const titleGrid = [
     {
       headerText: "Username",
@@ -62,12 +61,18 @@ const Users = () => {
     {
       field: "Actions",
       headerText: "Actions",
-      template: gridUserStatus,
+      template: (params) => {
+        return (
+          <button style={{ background: "#03C9D7" }} className="text-gray-500 py-1 px-2 capitalize rounded-2xl text-md"
+            onClick={() => gridUserStatus(params, params._id)}>
+            {params.status === 'blocked' ? "Unblock" : "Block" }
+          </button>
+        );
+      },
       width: "120",
       textAlign: "Center",
     },
   ];
-
   return (
     <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
       <Header category="Page" title="Users" />
@@ -85,8 +90,15 @@ const Users = () => {
       >
         <ColumnsDirective>
           {titleGrid.map((item, index) => (
-            <ColumnDirective key={item._id}  {...item} />
-            
+            <ColumnDirective
+              key={index}
+              field={item.field}
+              headerText={item.headerText}
+              width={item.width}
+              format={item.format}
+              textAlign={item.textAlign}
+              template={item.template}
+            />
           ))}
         </ColumnsDirective>
         <Inject services={[Toolbar, Search, Page]} />
