@@ -4,7 +4,6 @@ import { Dashboard, Blogs, Category, Users, Login } from "./pages";
 import { TooltipComponent } from "@syncfusion/ej2-react-popups";
 import { FiSettings } from "react-icons/fi";
 import { useStateContext } from "../src/contexts/ContextProvider";
-import Dummy from "./pages/Dummy";
 import "./App.css";
 import { Footer, Navbar, Sidebar, ThemeSettings } from "./components";
 

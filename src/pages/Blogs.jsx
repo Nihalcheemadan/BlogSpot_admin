@@ -43,7 +43,8 @@ const Blogs = () => {
       await axios.patch(`http://localhost:5000/api/blog/blockBlog?id=${params._id}`)
         setTimeout(() => setChange(prevState => !prevState), 1000);
     }else if(params.status === 'published'){
-      navigate('/')
+      // <link  href="http://localhost:3000/" />
+      window.location.href = 'http://localhost:3000/'
     }
     else{
       await axios.patch(`http://localhost:5000/api/blog/unblockBlog?id=${params._id}`)

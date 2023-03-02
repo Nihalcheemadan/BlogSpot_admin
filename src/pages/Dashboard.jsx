@@ -1,34 +1,49 @@
-import React, { useEffect } from "react";
-import { useStateContext } from "../contexts/ContextProvider";
-import { FiSettings } from "react-icons/fi";
-import { TooltipComponent } from "@syncfusion/ej2-react-popups";
-import { Navbar, Footer, Sidebar, ThemeSettings } from "../components";
-import { earningData, dropdownData } from "../data/dummy";
+import React, { useEffect, useState } from "react";
+import { MdOutlineSupervisorAccount } from 'react-icons/md';
+import { BsBoxSeam } from 'react-icons/bs';
+import axios from "axios";
+
+
+
 
 const Dashboard = () => {
-  const {
-    setCurrentColor,
-    setCurrentMode,
-    currentMode,
-    activeMenu,
-    currentColor,
-    themeSettings,
-    setThemeSettings,
-  } = useStateContext();
-  useEffect(() => {
-    const currentThemeColor = localStorage.getItem("colorMode");
-    const currentThemeMode = localStorage.getItem("themeMode");
-    if (currentThemeColor && currentThemeMode) {
-      setCurrentColor(currentThemeColor);
-      setCurrentMode(currentThemeMode);
-    }
-  }, []);
+
+  const [ blogs,setBlogs ] = useState();
+
+  const data = [
+    {
+      icon: <MdOutlineSupervisorAccount />,
+      amount: '10',
+      percentage: '',
+      title: 'Active users',
+      iconColor: '#03C9D7',
+      iconBg: '#E5FAFB',
+      pcColor: 'red-600',
+    },
+    {
+      icon: <BsBoxSeam />,
+      amount: '8',
+      percentage: '',
+      title: 'Blogs',
+      iconColor: 'rgb(255, 244, 229)',
+      iconBg: 'rgb(254, 201, 15)',
+      pcColor: 'green-600',
+    },
+  ]
+
+  useEffect(()=>{
+    axios.get('http://localhost:5000/api/admin/dashboard').then((res)=>{
+      console.log(res.data.blogs,'klklklkkl');
+      setBlogs(res.data.blogs);
+      setUsers(res.data.users);
+    })
+  })
 
   return (
     <div className="mt-24">
       <div className="flex flex-wrap lg:flex-nowrap justify-center ">
         <div className="flex m-3 flex-wrap justify-center gap-1 items-center">
-          {earningData.map((item) => (
+          {data.map((item) => (
             <div
               key={item.title}
               className="bg-white h-44 dark:text-gray-200 dark:bg-secondary-dark-bg md:w-56  p-4 pt-9 rounded-2xl "
