@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
 import { BrowserRouter, Outlet, createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Dashboard, Blogs, Category, Users, Login } from "./pages";
+import { Dashboard, Blogs, Category, Users, Login, ProtectedRoute, SingleBlog } from "./pages";
 import { TooltipComponent } from "@syncfusion/ej2-react-popups";
 import { FiSettings } from "react-icons/fi";
 import { useStateContext } from "../src/contexts/ContextProvider";
 import "./App.css";
 import { Footer, Navbar, Sidebar, ThemeSettings } from "./components";
+// import Graph from "./components/Graph";
 
 const App = () => {
   const {
@@ -77,9 +78,9 @@ const App = () => {
     {
       path: "/",
       element: (
-        // <ProtectedRoute>
-        <Layout />
-        /* </ProtectedRoute> */
+         <ProtectedRoute>
+          <Layout />
+         </ProtectedRoute>  
       ),
       children: [
         {
@@ -95,15 +96,21 @@ const App = () => {
           element: <Category />,
         },
         {
+          path: "/singleBlog",
+          element: <SingleBlog />,
+        },
+        {
           path: "/users",
           element: <Users />,
-        },
+        }
       ],
     },
     {
       path: "/login",
       element: <Login />,
     },
+    
+
   ]);
 
   return (

@@ -1,43 +1,47 @@
 import React, { useEffect, useState } from "react";
-import { MdOutlineSupervisorAccount } from 'react-icons/md';
-import { BsBoxSeam } from 'react-icons/bs';
+import { MdOutlineSupervisorAccount } from "react-icons/md";
+import { BsBoxSeam } from "react-icons/bs";
 import axios from "axios";
 
-
-
-
 const Dashboard = () => {
-
-  const [ blogs,setBlogs ] = useState();
+  const [blogs, setBlogs] = useState();
 
   const data = [
     {
       icon: <MdOutlineSupervisorAccount />,
-      amount: '10',
-      percentage: '',
-      title: 'Active users',
-      iconColor: '#03C9D7',
-      iconBg: '#E5FAFB',
-      pcColor: 'red-600',
+      amount: "10",
+      percentage: "",
+      title: "Active users",
+      iconColor: "#03C9D7",
+      iconBg: "#E5FAFB",
+      pcColor: "red-600",
     },
     {
       icon: <BsBoxSeam />,
-      amount: '8',
-      percentage: '',
-      title: 'Blogs',
-      iconColor: 'rgb(255, 244, 229)',
-      iconBg: 'rgb(254, 201, 15)',
-      pcColor: 'green-600',
+      amount: "8",
+      percentage: "",
+      title: "Blogs",
+      iconColor: "rgb(255, 244, 229)",
+      iconBg: "rgb(254, 201, 15)",
+      pcColor: "green-600",
     },
-  ]
+  ];
 
-  useEffect(()=>{
-    axios.get('http://localhost:5000/api/admin/dashboard').then((res)=>{
-      console.log(res.data.blogs,'klklklkkl');
-      setBlogs(res.data.blogs);
-      setUsers(res.data.users);
-    })
-  })
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    axios
+      .get("http://localhost:5000/api/admin/dashboard", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((res) => {
+        console.log(res.data.blogs, "klklklkkl");
+        setBlogs(res.data.blogs);
+        setUsers(res.data.users);
+      });
+  });
 
   return (
     <div className="mt-24">
@@ -71,6 +75,6 @@ const Dashboard = () => {
       </div>
     </div>
   );
-}; 
+};
 
 export default Dashboard;

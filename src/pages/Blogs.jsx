@@ -27,12 +27,21 @@ const Blogs = () => {
   const [blog, setBlog] = useState([]);
   const [change, setChange] = useState(false);
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+
 
   useEffect(() => {
     async function fetchData() {
+      const token = localStorage.getItem("token");
+
       const response = await axios.get(
-        "http://localhost:5000/api/admin/getBlog"
-      );
+        "http://localhost:5000/api/admin/getBlog", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        })
+      
       setBlog(response.data.blog);
     }
     fetchData();
@@ -40,14 +49,30 @@ const Blogs = () => {
 
   const gridBlogstatus = async (params,id) => {
     if(params.status === 'reported'){
-      await axios.patch(`http://localhost:5000/api/blog/blockBlog?id=${params._id}`)
+      await axios.patch(`http://localhost:5000/api/blog/blockBlog?id=${params._id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
         setTimeout(() => setChange(prevState => !prevState), 1000);
     }else if(params.status === 'published'){
-      // <link  href="http://localhost:3000/" />
-      window.location.href = 'http://localhost:3000/'
+      // <link  href="http://localhost:3000/singleBlog/" />
+      window.location.href = `http://localhost:3000/post`
+      // console.log(params,'paramsss');
+      // onClick = () => {
+        // navigate('/singleBlog', {
+        //   state: { data: params },
+        // })
+      // }
     }
     else{
-      await axios.patch(`http://localhost:5000/api/blog/unblockBlog?id=${params._id}`)
+      await axios.patch(`http://localhost:5000/api/blog/unblockBlog?id=${params._id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
         setTimeout(() => setChange(prevState => !prevState), 1000);
     }
   }

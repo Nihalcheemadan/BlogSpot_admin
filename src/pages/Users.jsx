@@ -15,13 +15,21 @@ import { useState } from "react";
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [change, setChange] = useState(false);
+  const token = localStorage.getItem("token");
+
  
  
   useEffect(() => {
     async function fetchData() {
+      const token = localStorage.getItem("token");
+
       const response = await axios.get(
-        "http://localhost:5000/api/admin/getUsers"
-      );
+        "http://localhost:5000/api/admin/getUsers", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        })
       setUsers(response.data);
     }
     fetchData();
@@ -34,10 +42,20 @@ const Users = () => {
     
     if(params.status === 'unblocked'){
       console.log('hello ');
-      await axios.get(`http://localhost:5000/api/admin/userBlock?id=${params._id}`)
+      await axios.get(`http://localhost:5000/api/admin/userBlock?id=${params._id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
         setTimeout(() => setChange(prevState => !prevState), 1000);
     }else{
-      await axios.get(`http://localhost:5000/api/admin/userUnblock?id=${params._id}`)
+      await axios.get(`http://localhost:5000/api/admin/userUnblock?id=${params._id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
         setTimeout(() => setChange(prevState => !prevState), 1000);
     }
   };

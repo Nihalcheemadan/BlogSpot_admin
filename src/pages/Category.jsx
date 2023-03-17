@@ -16,16 +16,23 @@ const Category = () => {
   const [editedImage, setEditedImage] = useState("");
   const [editId, setEditId] = useState("");
   const [change, setChange] = useState(false);
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     async function fetchData() {
       const response = await axios.get(
-        "http://localhost:5000/api/admin/getCategory"
+        "http://localhost:5000/api/admin/getCategory",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
       );
       setShowcategory(response.data);
     }
     fetchData();
-    console.log(change,'falseeeeeeee');
+    console.log(change, "falseeeeeeee");
   }, []);
 
   const cloudAPI = "dudskpuk4";
@@ -46,10 +53,19 @@ const Category = () => {
           const imageUrl = response.data.secure_url;
           console.log(imageUrl);
           const response1 = await axios
-            .post("http://localhost:5000/api/admin/createCategory", {
-              imageUrl: imageUrl,
-              category: category,
-            })
+            .post(
+              "http://localhost:5000/api/admin/createCategory",
+              {
+                imageUrl: imageUrl,
+                category: category,
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  "Content-Type": "application/json",
+                },
+              }
+            )
             .then(() => {
               setShowModal(false);
             });
@@ -60,37 +76,38 @@ const Category = () => {
     }
   };
 
-  
   const editCategory = async () => {
-    const token = localStorage.getItem("adminToken");
+    const token = localStorage.getItem("token");
     const formData = new FormData();
     formData.append("file", editedImage);
     formData.append("upload_preset", "blogapp ");
-  
+
     try {
       const response = await axios.post(
         `https://api.cloudinary.com/v1_1/${cloudAPI}/image/upload`,
         formData
       );
-  
+
       const imageUrl = response.data.secure_url;
-      await axios.put(
-        `http://localhost:5000/api/admin/editCategory`,
-        {
-          id: editId,
-          imageUrl,
-          category: editedCategory,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
+      await axios
+        .put(
+          `http://localhost:5000/api/admin/editCategory`,
+          {
+            id: editId,
+            imageUrl,
+            category: editedCategory,
           },
-        }
-      ).then(()=>{
-        setEditModal(false);
-        navigate("/"); 
-        // setTimeout(() => setChange(true), 1000);
-      })
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then(() => {
+          setEditModal(false);
+          navigate("/");
+          // setTimeout(() => setChange(true), 1000);
+        });
     } catch (error) {
       console.log(error);
     }
@@ -104,8 +121,8 @@ const Category = () => {
   };
 
   const removeCategory = async () => {
-    const token = localStorage.getItem("adminToken");
-    console.log(editId,'eduted id');
+    const token = localStorage.getItem("token");
+    console.log(editId, "eduted id");
     await axios
       .delete(
         `http://localhost:5000/api/admin/deleteCategory?id=${editId}`,
@@ -118,7 +135,7 @@ const Category = () => {
       )
       .then(() => {
         setEditModal(false);
-      })
+      });
   };
 
   return (
@@ -368,7 +385,6 @@ const Category = () => {
                           </div>
                         </div>
                       </form>
-                      
                     </div>
                   </div>
                 </div>
