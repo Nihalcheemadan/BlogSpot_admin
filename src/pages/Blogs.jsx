@@ -21,21 +21,28 @@ import { Navbar, Footer, Sidebar, ThemeSettings, Header } from "../components";
 import { ordersData, contextMenuItems, ordersGrid } from "../data/dummy";
 import axios from "axios";
 import {  useNavigate } from "react-router-dom";
+import instance from "../utils/baseUrl";
+import SingleBlog from "./SingleBlog";
+import { useDispatch } from "react-redux";
+import { setSingleBlog } from "../redux/blogSlice";
 
 const Blogs = () => {
+
+  const dispatch = useDispatch();
+
 
   const [blog, setBlog] = useState([]);
   const [change, setChange] = useState(false);
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("admintoken");
 
 
   useEffect(() => {
     async function fetchData() {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("admintoken");
 
-      const response = await axios.get(
-        "http://localhost:5000/api/admin/getBlog", {
+      const response = await instance.get(
+        "/admin/getBlog", {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -48,8 +55,11 @@ const Blogs = () => {
   }, [change]);
 
   const gridBlogstatus = async (params,id) => {
+    dispatch(setSingleBlog(params))
+
+
     if(params.status === 'reported'){
-      await axios.patch(`http://localhost:5000/api/blog/blockBlog?id=${params._id}`, {
+      await instance.patch(`/blog/blockBlog?id=${params._id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -58,16 +68,14 @@ const Blogs = () => {
         setTimeout(() => setChange(prevState => !prevState), 1000);
     }else if(params.status === 'published'){
       // <link  href="http://localhost:3000/singleBlog/" />
-      window.location.href = `http://localhost:3000/post`
+      // window.location.href = `http://localhost:3000/post`
       // console.log(params,'paramsss');
       // onClick = () => {
-        // navigate('/singleBlog', {
-        //   state: { data: params },
-        // })
+        navigate('/singleBlog')
       // }
     }
     else{
-      await axios.patch(`http://localhost:5000/api/blog/unblockBlog?id=${params._id}`, {
+      await instance.patch(`/blog/unblockBlog?id=${params._id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",

@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import axios from "axios";
 import { useState } from "react";
 import { toast, Toaster } from "react-hot-toast";
+import instance from "../utils/baseUrl";
 
 function Login() {
   const [loading, setLoading] = useState(false);
@@ -26,14 +27,14 @@ function Login() {
     onSubmit: async (values) => {
       setLoading(true);
       try {
-        const loginPromise = await axios.post(
-          "http://localhost:5000/api/admin/login",
+        const loginPromise = await instance.post(
+          "/admin/login",
           values
         );
         setLoading(false);
         console.log(loginPromise);
         let { token } = loginPromise.data;
-        localStorage.setItem("token", token);
+        localStorage.setItem("admintoken", token);
         navigate("/", { replace: true });
       } catch (error) {
         setLoading(false);

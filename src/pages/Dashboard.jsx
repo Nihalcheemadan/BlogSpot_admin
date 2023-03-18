@@ -2,14 +2,16 @@ import React, { useEffect, useState } from "react";
 import { MdOutlineSupervisorAccount } from "react-icons/md";
 import { BsBoxSeam } from "react-icons/bs";
 import axios from "axios";
+import instance from "../utils/baseUrl";
 
 const Dashboard = () => {
-  const [blogs, setBlogs] = useState();
+  const [blogs, setBlogs] = useState(Number);
+  const [users,setUsers] =useState(Number);
 
   const data = [
     {
       icon: <MdOutlineSupervisorAccount />,
-      amount: "10",
+      amount: `${users}`,
       percentage: "",
       title: "Active users",
       iconColor: "#03C9D7",
@@ -18,7 +20,7 @@ const Dashboard = () => {
     },
     {
       icon: <BsBoxSeam />,
-      amount: "8",
+      amount: `${blogs}`,
       percentage: "",
       title: "Blogs",
       iconColor: "rgb(255, 244, 229)",
@@ -28,9 +30,9 @@ const Dashboard = () => {
   ];
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    axios
-      .get("http://localhost:5000/api/admin/dashboard", {
+    const token = localStorage.getItem("admintoken");
+    instance
+      .get("/admin/dashboard", {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",

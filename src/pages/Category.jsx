@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import instance from "../utils/baseUrl";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 const Category = () => {
   const navigate = useNavigate();
@@ -16,19 +19,16 @@ const Category = () => {
   const [editedImage, setEditedImage] = useState("");
   const [editId, setEditId] = useState("");
   const [change, setChange] = useState(false);
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("admintoken");
 
   useEffect(() => {
     async function fetchData() {
-      const response = await axios.get(
-        "http://localhost:5000/api/admin/getCategory",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await instance.get("/admin/getCategory", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
       setShowcategory(response.data);
     }
     fetchData();
@@ -52,9 +52,9 @@ const Category = () => {
           console.log(response.data.secure_url);
           const imageUrl = response.data.secure_url;
           console.log(imageUrl);
-          const response1 = await axios
+          const response1 = await instance
             .post(
-              "http://localhost:5000/api/admin/createCategory",
+              "/admin/createCategory",
               {
                 imageUrl: imageUrl,
                 category: category,
@@ -77,7 +77,7 @@ const Category = () => {
   };
 
   const editCategory = async () => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("admintoken");
     const formData = new FormData();
     formData.append("file", editedImage);
     formData.append("upload_preset", "blogapp ");
@@ -89,9 +89,9 @@ const Category = () => {
       );
 
       const imageUrl = response.data.secure_url;
-      await axios
+      await instance
         .put(
-          `http://localhost:5000/api/admin/editCategory`,
+          `/admin/editCategory`,
           {
             id: editId,
             imageUrl,
@@ -121,18 +121,14 @@ const Category = () => {
   };
 
   const removeCategory = async () => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("admintoken");
     console.log(editId, "eduted id");
-    await axios
-      .delete(
-        `http://localhost:5000/api/admin/deleteCategory?id=${editId}`,
-
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+    await instance
+      .delete(`/admin/deleteCategory?id=${editId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then(() => {
         setEditModal(false);
       });
@@ -187,9 +183,8 @@ const Category = () => {
                     className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
                     onClick={() => setShowModal(false)}
                   >
-                    <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                      ×
-                    </span>
+                    <FontAwesomeIcon icon={faTimes} />
+                    <span className="sr-only">Close</span>
                   </button>
                 </div>
                 {/*body*/}
@@ -299,9 +294,8 @@ const Category = () => {
                     className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
                     onClick={() => setEditModal(false)}
                   >
-                    <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                      ×
-                    </span>
+                    <FontAwesomeIcon icon={faTimes} />
+                    <span className="sr-only">Close</span>
                   </button>
                 </div>
                 {/*body*/}

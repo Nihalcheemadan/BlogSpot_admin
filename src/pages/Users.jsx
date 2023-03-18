@@ -11,20 +11,21 @@ import {
 import { Header } from "../components";
 import axios from "axios";
 import { useState } from "react";
+import instance from "../utils/baseUrl";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [change, setChange] = useState(false);
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("admintoken");
 
  
  
   useEffect(() => {
     async function fetchData() {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("admintoken");
 
-      const response = await axios.get(
-        "http://localhost:5000/api/admin/getUsers", {
+      const response = await instance.get(
+        "/admin/getUsers", {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -42,7 +43,7 @@ const Users = () => {
     
     if(params.status === 'unblocked'){
       console.log('hello ');
-      await axios.get(`http://localhost:5000/api/admin/userBlock?id=${params._id}`, {
+      await instance.get(`/admin/userBlock?id=${params._id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -50,7 +51,7 @@ const Users = () => {
       })
         setTimeout(() => setChange(prevState => !prevState), 1000);
     }else{
-      await axios.get(`http://localhost:5000/api/admin/userUnblock?id=${params._id}`, {
+      await instance.get(`/admin/userUnblock?id=${params._id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",

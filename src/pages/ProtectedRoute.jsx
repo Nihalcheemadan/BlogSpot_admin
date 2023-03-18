@@ -1,17 +1,18 @@
 import axios from "axios"
 import { Navigate } from "react-router-dom"
+import instance from "../utils/baseUrl"
 
 const ProtectedRoute = ({ children }) => {
-    const token = localStorage.getItem("token")
+    const token = localStorage.getItem("admintoken")
     if(token){
-        axios
-        .get("http://localhost:5000/admin/authenticate",
+      instance
+        .get("/admin/authenticate",
         {headers : {
           Authorization: `Bearer ${token}`,
       }})
         .then((response) => {
           const admin = response.data.admin
-          if(!admin){
+          if(admin){
             localStorage.clear()
             window.location.reload()
             return <Navigate to = {"/login"} replace = {true}></Navigate>

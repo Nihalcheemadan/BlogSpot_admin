@@ -30,7 +30,7 @@
 // };
 
 // const chart =()=>{
-//   axios.get(`/admin/chart`)
+//   instance.get(`/admin/chart`)
 //     .then((response) => {
 //         setUsers(response.data.users);
 //         console.log(response.data.users)

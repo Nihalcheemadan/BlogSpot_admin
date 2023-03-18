@@ -48,7 +48,7 @@ const Sidebar = () => {
           icon: <FiLogOut />,
           onClick: () => {
             localStorage.clear();
-            window.location.href = "/login"; // redirect to login page after logout
+            window.location.href = "/login"; 
           },
         },
       ],
