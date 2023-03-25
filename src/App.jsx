@@ -110,7 +110,6 @@ const App = () => {
       element: <Login />,
     },
     
-
   ]);
 
   return (
